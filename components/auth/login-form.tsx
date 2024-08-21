@@ -33,17 +33,17 @@ export function LoginForm() {
 
         startTransition(() => {
             login(values)
-             .then((data) => {
-                setError(data.error)
-                setSuccess(data.success)
-             })
+                .then((data) => {
+                    setError(data.error)
+                    setSuccess(data.success)
+                })
         })
     };
 
-    return(
-        <CardWrapper 
-            headerLabel="Welcome back!" 
-            backButtonLabel="Don't have an account?" 
+    return (
+        <CardWrapper
+            headerLabel="Welcome back!"
+            backButtonLabel="Don't have an account?"
             backButtonHref="/auth/register"
             showSocial
         >
@@ -51,25 +51,25 @@ export function LoginForm() {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-4">
                         <FormField control={form.control} name="email" render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input 
-                                            {...field}
-                                            disabled={isPending}
-                                            placeholder="next-auth@gmail.com"
-                                            type="email"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
+                            <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        {...field}
+                                        disabled={isPending}
+                                        placeholder="next-auth@gmail.com"
+                                        type="email"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
                         )} />
 
                         <FormField control={form.control} name="password" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Password</FormLabel>
                                 <FormControl>
-                                    <Input 
+                                    <Input
                                         {...field}
                                         disabled={isPending}
                                         placeholder="*****"
@@ -80,8 +80,8 @@ export function LoginForm() {
                             </FormItem>
                         )} />
                     </div>
-                    <FormError message={error}/>
-                    <FormSuccess message={success}/>
+                    <FormError message={error} />
+                    <FormSuccess message={success} />
                     <Button type="submit" className="w-full" disabled={isPending}>
                         Login
                     </Button>
