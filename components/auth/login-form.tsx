@@ -32,11 +32,10 @@ export function LoginForm() {
         setSuccess("")
 
         startTransition(() => {
-            login(values)
-                .then((data) => {
-                    setError(data.error)
-                    setSuccess(data.success)
-                })
+            login(values).then((data) => {
+                setError(data?.error);
+                setSuccess(data?.success)
+            })
         })
     };
 

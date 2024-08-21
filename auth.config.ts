@@ -1,7 +1,8 @@
 import GitHub from "next-auth/providers/github";
 import bcryptjs from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
+// import credentials from "next-auth/providers/credentials";
+import Credentials from "next-auth/providers/credentials"
 
 import { LoginSchemas } from "./schemas";
 import { getUser } from "./data/user";
