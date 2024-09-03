@@ -4,40 +4,34 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 
 import { CardWrapper } from "./card-wrapper";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { LoginSchemas } from "@/schemas";
+import { ResetPasswordSchema } from "@/schemas";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
-import { login } from "@/actions/login";
+import { resetPassword } from "@/actions/reset";
 
-export function LoginForm() {
-    const searchParams = useSearchParams();
-    const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email already in use" : "";
-
+export function ResetForm() {
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
 
-    const form = useForm<z.infer<typeof LoginSchemas>>({
-        resolver: zodResolver(LoginSchemas),
+    const form = useForm<z.infer<typeof ResetPasswordSchema>>({
+        resolver: zodResolver(ResetPasswordSchema),
         defaultValues: {
-            email: "",
-            password: ""
+            email: ""
         }
     });
 
-    const onSubmit = (values: z.infer<typeof LoginSchemas>) => {
+    const onSubmit = (values: z.infer<typeof ResetPasswordSchema>) => {
         setError("");
         setSuccess("")
 
         startTransition(() => {
-            login(values).then((data) => {
+            resetPassword(values).then((data) => {
                 setError(data?.error);
                 setSuccess(data?.success)
             })
@@ -46,9 +40,9 @@ export function LoginForm() {
 
     return (
         <CardWrapper
-            headerLabel="Welcome back!"
-            backButtonLabel="Don't have an account?"
-            backButtonHref="/auth/register"
+            headerLabel="Forgt your password!"
+            backButtonLabel="Back to login"
+            backButtonHref="/auth/login"
             showSocial
         >
             <Form {...form}>
@@ -68,36 +62,11 @@ export function LoginForm() {
                                 <FormMessage />
                             </FormItem>
                         )} />
-
-                        <FormField control={form.control} name="password" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Password</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        disabled={isPending}
-                                        placeholder="*****"
-                                        type="password"
-                                    />
-                                </FormControl>
-                                <Button
-                                    size="sm"
-                                    variant="link"
-                                    asChild
-                                    className="px-0 font-normal"
-                                >
-                                    <Link href="/auth/reset">
-                                        Forgote password?
-                                    </Link>
-                                </Button>
-                                <FormMessage />
-                            </FormItem>
-                        )} />
                     </div>
-                    <FormError message={error || urlError} />
+                    <FormError message={error} />
                     <FormSuccess message={success} />
                     <Button type="submit" className="w-full" disabled={isPending}>
-                        Login
+                        Send reset password
                     </Button>
                 </form>
             </Form>
