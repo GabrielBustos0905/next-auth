@@ -29,6 +29,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       // Anullar el OAuth  si no tienen el email verificado
       if(account?.provider !== "credentials") return true;
 
+      if(!user.id) return false;
       const existingUser = await getUserById(user.id);
 
       if(!existingUser?.emailVerified) return false;
@@ -59,6 +60,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.role = token.role as UserRole;
       }
 
+      if(token.isTwoFactorEnabled && session.user) {
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+      }
+
       return session
     },
     async jwt({ token }) {
@@ -69,6 +74,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if(!existingUser) return token;
 
       token.role = existingUser.role
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
       return token
     }
