@@ -22,7 +22,13 @@ export default auth((req) => {
   };
 
   if(!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL("/auth/login", nextUrl))
+    let callbackUrl = nextUrl.pathname;
+
+    if(nextUrl.search) callbackUrl += nextUrl.search;
+
+    const encodeCallbackUrl = encodeURIComponent(callbackUrl);
+
+    return Response.redirect(new URL(`/auth/login?callbackUrl=${encodeCallbackUrl}`, nextUrl));
   };
 
   return
